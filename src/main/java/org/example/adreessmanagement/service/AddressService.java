@@ -8,24 +8,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class AddressService {
+public class AddressService implements AddressServiceInterface {
 
     private List<Adress> adressList = new ArrayList<>();
 
+    @Override
     public List<Adress> getAllAddresses() {
         return adressList;
     }
 
+    @Override
     public Adress getAddressById(Long id) {
         return adressList.stream().filter(a -> a.getId().equals(id)).findFirst().orElse(null);
     }
 
+    @Override
     public Adress createAddress(AddressDTO adressDTO) {
         Adress adress = new Adress((long) (adressList.size() + 1), adressDTO.getName(), adressDTO.getCity(), adressDTO.getPhoneNumber());
         adressList.add(adress);
         return adress;
     }
 
+    @Override
     public Adress updateAddress(Long id, Adress adressDTO) {
         for (Adress adress : adressList) {
             if (adress.getId().equals(id)) {
@@ -38,6 +42,7 @@ public class AddressService {
         return null;
     }
 
+    @Override
     public void deleteAddress(Long id) {
         adressList.removeIf(adress -> adress.getId().equals(id));
     }
