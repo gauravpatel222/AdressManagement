@@ -1,7 +1,10 @@
 package org.example.adreessmanagement.service;
 
 import org.example.adreessmanagement.dto.AddressDTO;
-import org.example.adreessmanagement.model.Adress;
+import org.example.adreessmanagement.interfac.AddressServiceInterface;
+import org.example.adreessmanagement.model.Address;
+import org.example.adreessmanagement.repository.AddressRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,41 +12,40 @@ import java.util.List;
 
 @Service
 public class AddressService implements AddressServiceInterface {
-
-    private List<Adress> adressList = new ArrayList<>();
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Override
-    public List<Adress> getAllAddresses() {
-        return adressList;
+    public List<Address> getAllAddresses() {
+        return addressRepository.findAll();
     }
 
     @Override
-    public Adress getAddressById(Long id) {
-        return adressList.stream().filter(a -> a.getId().equals(id)).findFirst().orElse(null);
+    public Address getAddressById(Long id) {
+        return addressRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Adress createAddress(AddressDTO adressDTO) {
-        Adress adress = new Adress((long) (adressList.size() + 1), adressDTO.getName(), adressDTO.getCity(), adressDTO.getPhoneNumber());
-        adressList.add(adress);
-        return adress;
+    public Address createAddress(AddressDTO addressDTO) {
+        Address address = new Address();
+        address.setName(addressDTO.getName());
+        address.setCity(addressDTO.getCity());
+        address.setPhoneNumber(addressDTO.getPhoneNumber());
+        return addressRepository.save(address);
     }
 
     @Override
-    public Adress updateAddress(Long id, Adress adressDTO) {
-        for (Adress adress : adressList) {
-            if (adress.getId().equals(id)) {
-                adress.setName(adressDTO.getName());
-                adress.setCity(adressDTO.getCity());
-                adress.setPhoneNumber(adressDTO.getPhoneNumber());
-                return adress;
-            }
-        }
-        return null;
+    public Address updateAddress(Long id, Address addressDTO) {
+        return addressRepository.findById(id).map(address -> {
+            address.setName(addressDTO.getName());
+            address.setCity(addressDTO.getCity());
+            address.setPhoneNumber(addressDTO.getPhoneNumber());
+            return addressRepository.save(address);
+        }).orElse(null);
     }
 
     @Override
     public void deleteAddress(Long id) {
-        adressList.removeIf(adress -> adress.getId().equals(id));
+        addressRepository.deleteById(id);
     }
 }
