@@ -1,6 +1,7 @@
 package org.example.adreessmanagement.controller;
 
 import org.example.adreessmanagement.dto.AddressDTO;
+import org.example.adreessmanagement.interfac.AddressServiceInterface;
 import org.example.adreessmanagement.model.Address;
 import org.example.adreessmanagement.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api/addressbook")
 public class AddressController {
 
-    private final AddressService addressService;
+    private final AddressServiceInterface addressService;
 
     @Autowired
     public AddressController(AddressService addressService) {

@@ -29,8 +29,9 @@ public class AddressService implements AddressServiceInterface {
     public Address createAddress(AddressDTO addressDTO) {
         Address address = new Address();
         address.setName(addressDTO.getName());
-        address.setCity(addressDTO.getCity());
-        address.setPhoneNumber(addressDTO.getPhoneNumber());
+        address.setAddress(addressDTO.getAddress());
+        address.setContactNumber(addressDTO.getContactNumber());
+        address.setEmail(addressDTO.getEmail());
         return addressRepository.save(address);
     }
 
@@ -38,8 +39,9 @@ public class AddressService implements AddressServiceInterface {
     public Address updateAddress(Long id, Address addressDTO) {
         return addressRepository.findById(id).map(address -> {
             address.setName(addressDTO.getName());
-            address.setCity(addressDTO.getCity());
-            address.setPhoneNumber(addressDTO.getPhoneNumber());
+            address.setAddress(addressDTO.getAddress());
+            address.setContactNumber(addressDTO.getContactNumber());
+            address.setEmail(addressDTO.getEmail());
             return addressRepository.save(address);
         }).orElse(null);
     }
