@@ -9,7 +9,7 @@ import org.example.adreessmanagement.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.example.adreessmanagement.service.JwtTokenService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -20,6 +20,9 @@ public class AuthUserService implements AuthUserInterface {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    public JwtTokenService jwtTokenService;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -57,8 +60,10 @@ public class AuthUserService implements AuthUserInterface {
         String subject = "Login Successful!";
         String body = "Hello " + authUser.getName() + ",\n\nYou have successfully logged in.\n\nBest Regards,\nYour Team";
         emailService.sendEmail(authUser.getEmail(), subject, body);
+        // Generate JWT Token
+        String token = jwtTokenService.createToken(authUser.getId());
+        return "Login successful! Token: " + token;
 
-        return "Login successful! Email sent to " + authUser.getEmail();
     }
 
     // Forgot Password
@@ -96,6 +101,6 @@ public class AuthUserService implements AuthUserInterface {
 
         emailService.sendEmail(email, "Password Reset Status", "Your password has been reset successfully!");
 
-        return "Password reset successful!";
+        return "Passwxord reset successful!";
     }
 }
