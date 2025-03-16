@@ -1,31 +1,35 @@
 package org.example.adreessmanagement.service;
 
 import org.example.adreessmanagement.dto.AddressDTO;
-import org.example.adreessmanagement.interfac.AddressServiceInterface;
 import org.example.adreessmanagement.model.Address;
 import org.example.adreessmanagement.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class AddressService implements AddressServiceInterface {
+public class AddressService {
+
     @Autowired
     private AddressRepository addressRepository;
 
-    @Override
+    // Cache all addresses
+    @Cacheable(value = "addresses")
     public List<Address> getAllAddresses() {
         return addressRepository.findAll();
     }
 
-    @Override
+    // Cache a specific address by ID
+    @Cacheable(value = "addresses", key = "#id")
     public Address getAddressById(Long id) {
         return addressRepository.findById(id).orElse(null);
     }
 
-    @Override
+    // Create new address and clear cache
+    @CacheEvict(value = "addresses", allEntries = true)
     public Address createAddress(AddressDTO addressDTO) {
         Address address = new Address();
         address.setName(addressDTO.getName());
@@ -35,7 +39,8 @@ public class AddressService implements AddressServiceInterface {
         return addressRepository.save(address);
     }
 
-    @Override
+    // Update address and clear cache
+    @CacheEvict(value = "addresses", allEntries = true)
     public Address updateAddress(Long id, Address addressDTO) {
         return addressRepository.findById(id).map(address -> {
             address.setName(addressDTO.getName());
@@ -46,7 +51,8 @@ public class AddressService implements AddressServiceInterface {
         }).orElse(null);
     }
 
-    @Override
+    // Delete address and clear cache
+    @CacheEvict(value = "addresses", allEntries = true)
     public void deleteAddress(Long id) {
         addressRepository.deleteById(id);
     }

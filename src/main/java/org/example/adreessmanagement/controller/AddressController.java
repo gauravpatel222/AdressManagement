@@ -12,13 +12,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/addressbook")
 public class AddressController {
-
+    
     private final AddressServiceInterface addressService;
 
-    @Autowired
-    public AddressController(AddressService addressService) {
-        this.addressService = addressService;
+    public AddressController() {
+        addressService = null;
     }
+
 
     @GetMapping("/all")
     public List<Address> getAllAddresses() {
