@@ -41,7 +41,7 @@ public class AddressService {
 
     // Update address and clear cache
     @CacheEvict(value = "addresses", allEntries = true)
-    public Address updateAddress(Long id, Address addressDTO) {
+    public Address updateAddress(Long id, AddressDTO addressDTO) {
         return addressRepository.findById(id).map(address -> {
             address.setName(addressDTO.getName());
             address.setAddress(addressDTO.getAddress());

@@ -1,10 +1,8 @@
 package org.example.adreessmanagement.controller;
 
 import org.example.adreessmanagement.dto.AddressDTO;
-import org.example.adreessmanagement.interfac.AddressServiceInterface;
+import org.example.adreessmanagement.service.AddressService; // Assuming you have a Service class
 import org.example.adreessmanagement.model.Address;
-import org.example.adreessmanagement.service.AddressService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,13 +10,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/addressbook")
 public class AddressController {
-    
-    private final AddressServiceInterface addressService;
 
-    public AddressController() {
-        addressService = null;
+    private final AddressService addressService; // Use Service instead of Interface directly
+
+    public AddressController(AddressService addressService) {
+        this.addressService = addressService;
     }
-
 
     @GetMapping("/all")
     public List<Address> getAllAddresses() {
@@ -36,10 +33,7 @@ public class AddressController {
     }
 
     @PutMapping("/update/{id}")
-
-    public Address updateAddress(@PathVariable Long id, @RequestBody Address updatedAddress) {
-        return addressService.updateAddress(id, updatedAddress);
+    public Address updateAddress(@PathVariable Long id, @RequestBody AddressDTO updatedAddressDTO) {
+        return addressService.updateAddress(id, updatedAddressDTO);
     }
-
-
 }
