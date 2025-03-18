@@ -6,6 +6,7 @@ import org.example.adreessmanagement.model.Address;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/addressbook")
@@ -23,7 +24,7 @@ public class AddressController {
     }
 
     @GetMapping("/get/{id}")
-    public Address getAddressById(@PathVariable Long id) {
+    public Optional<Address> getAddressById(@PathVariable Long id) {
         return addressService.getAddressById(id);
     }
 
@@ -33,7 +34,7 @@ public class AddressController {
     }
 
     @PutMapping("/update/{id}")
-    public Address updateAddress(@PathVariable Long id, @RequestBody AddressDTO updatedAddressDTO) {
+    public Optional<Address> updateAddress(@PathVariable Long id, @RequestBody AddressDTO updatedAddressDTO) {
         return addressService.updateAddress(id, updatedAddressDTO);
     }
 }
